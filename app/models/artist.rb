@@ -27,16 +27,22 @@ class Artist
     galleries.map {|g| g.city}
   end
 
- 
-  #Returns an integer that is the total years of experience of all artists
-  def self.total_experience
+   #Returns an integer that is the total years of experience of all artists
+   def self.total_experience
     (self.all.map {|a| a.years_experience}).sum
+  end
+
+  def total_paintings
+    paintings.size
+  end
+
+  def work_per_year
+    (self.total_paintings.to_f / self.years_experience) 
   end
 
   #Returns an instance of the artist with the highest amount of paintings per year of experience.
   def self.most_prolific
-    total_experience_array = self.all.map {|a| a.years_experience}.sort
-    the_most = total_experience_array.pop()
+    self.all.max_by {|a| a.work_per_year}
   end
 
   #Given the arguments of title, price and gallery, creates a new painting belonging to 
@@ -49,10 +55,14 @@ end
 
 
 =begin
-Artist#paintings
-
-
-Artist#galleries
+ 
+most_prolific_artist = self.all[0]
+    self.all.map do |a| 
+      if a.work_per_year < most_prolific_artist.work_per_year
+      most_prolific_artist = a
+      end
+    end
+    most_prolific_artist 
 
 Returns an array of all the galleries that an artist has paintings in
 Artist#cities
